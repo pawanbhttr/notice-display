@@ -1,2 +1,2 @@
-# notice-display
-A digital notice management console with display screen
+# Display Web
+Notice management console with display screen

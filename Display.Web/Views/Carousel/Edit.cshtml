@@ -1,0 +1,98 @@
+﻿@model Display.Web.Models.CarouselModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Carousel</h1>
+        </div>
+    </div>
+    @{ var mes = TempData["Message"] as string; var error = TempData["Error"] as string; }
+    @if (mes != null)
+    {
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="alert alert-@error alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @mes
+                </div>
+            </div>
+        </div>
+    }
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-list"></i>&nbsp;Edit Carousel
+                </div>
+                <div class="panel-body">
+
+                    @using (Html.BeginForm("Edit","Carousel", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+                    {
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.HiddenFor(model => model.CarouselID)
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">Content Type</label>
+                                @Html.DropDownListFor(model => model.Type, new List<SelectListItem> { new SelectListItem { Text = "Text", Value = "Text" }, new SelectListItem { Text = "Image", Value = "Image" } }, new { @class = "form-control", @id = "ddlType", @disabled= "disabled" })
+                                @Html.HiddenFor(model => model.Type)
+                            </div>
+                            <div id="text">
+                                <div class="form-group">
+                                    <label class="control-label">Content<span class="error">*</span></label>
+                                    @Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control", @id = "txtContent" } })
+                                </div>
+                            </div>
+                            <div id="image">
+                                <div class="form-group">
+                                    <label class="control-label">Image<span class="error">*&nbsp;(Upload size limit is 2 MB)</span></label>
+                                    <input type="file" class="form-control" accept="image/jpg,image/jpeg,image/png" name="fupImage" id="fupImage" />
+                                    <label class="error"></label>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.EditorFor(model => model.SubTitle, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="button" class="btn btn-outline btn-default" onclick="closeModal('/Carousel/List')">Cancel</button>
+                                <button type="submit" class="btn btn-outline btn-primary">Update</button>
+                            </div>
+                            </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var type = document.getElementById("ddlType").value;
+        var imageDiv = document.getElementById("image");
+        var textDiv = document.getElementById("text");
+        var contextBox = document.getElementById("txtContent");
+        var fupImage = document.getElementById("fupImage");
+        if (type == "Image") {
+            textDiv.style.display = "none";
+            image.style.display = "";
+            contextBox.removeAttribute("required");
+        }
+        else {
+            textDiv.style.display = "";
+            image.style.display = "none";
+            contextBox.setAttribute("required", "required");
+        }
+    });
+</script>

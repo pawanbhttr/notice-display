@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>@ViewBag.Title</title>
+    <link rel="icon" type="image/png" href="~/Contents/Images/displayweb.png" />
+    <link href="~/Contents/Styles/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Contents/Styles/metisMenu.min.css" rel="stylesheet" />
+    <link href="~/Contents/Styles/sb-admin-2.min.css" rel="stylesheet" />
+    <link href="~/Contents/Plugins/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Contents/Styles/site.css" rel="stylesheet" />
+    <link href="~/Contents/Plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" />
+    <script src="~/Contents/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Contents/Scripts/bootstrap.min.js"></script>
+    <script src="~/Contents/Scripts/metisMenu.min.js"></script>
+    <script src="~/Contents/Scripts/sb-admin-2.min.js"></script>
+    <script src="~/Contents/Plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Contents/Plugins/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="~/Contents/Scripts/site.js"></script>
+    <script src="~/Contents/Scripts/sweetalert.min.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+    @if (Session["UserID"] == null)
+    {
+        Response.Redirect("/Account/Login");
+    }
+    <div id="wrapper">
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/Home/Index">Admin</a>
+            </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>&nbsp; @Session["FullName"] &nbsp;<i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li>
+                            <a href="#"><i class="fa fa-user fa-fw"></i> Profile</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="/Account/Logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </li>
+                        <li class="active">
+                            <a href="/Home/Index"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="/Banner/List"><i class="fa fa-envelope fa-fw"></i> Banner</a>
+                        </li>
+                        <li>
+                            <a href="/Carousel/List"><i class="fa fa-file-powerpoint-o fa-fw"></i> Presentation</a>
+                        </li>
+                        <li>
+                            <a href="/Notice/List"><i class="fa fa-calendar fa-fw"></i> Notice</a>
+                        </li>
+                        <li>
+                            <a href="/Display/Index"><i class="fa fa-television fa-fw"></i> Screen</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div id="page-wrapper">
+            @RenderBody()
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+﻿@using Display.Web.Models
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Show</title>
+    <link rel="icon" type="image/png" href="~/Contents/Images/displayweb.png" />
+    <link href="~/Contents/Styles/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Contents/Styles/display.css" rel="stylesheet" />
+    <script src="~/Contents/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Contents/Scripts/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 marquee">
+                <p>@ViewBag.Banner</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8">
+                <div id="carousel-generic" class="carousel slide fullheight" data-ride="carousel">
+                    <div class="carousel-inner" role="listbox">
+                        @{ int i = 0; string cls = "active";}
+                        @foreach (var m in Model)
+                        {
+                            if (i != 0)
+                            {
+                                cls = string.Empty;
+                            }
+
+                            if (@m.Type == "Image")
+                            {
+                                <div class="item @cls">
+                                    <img src="~/Contents/Images/@m.Content" alt="">
+                                    <div class="carousel-caption">
+                                        <h3>@m.Title</h3>
+                                        <p>@m.SubTitle</p>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="item @cls">
+                                    <p>@m.Content</p>
+                                </div>
+                            }
+                            i++;
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <p>@ViewBag.Notice</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

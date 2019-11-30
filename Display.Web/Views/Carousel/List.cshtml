@@ -1,0 +1,112 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Carousel</h1>
+        </div>
+    </div>
+    @{ var mes = TempData["Message"] as string; var error = TempData["Error"] as string; }
+    @if (mes != null)
+    {
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="alert alert-@error alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @mes
+                </div>
+            </div>
+        </div>
+    }
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-list"></i>&nbsp;Carousel List
+                    <a href="/Carousel/Add" class="btn btn-outline btn-primary btn-xs pull-right"><i class="fa fa-plus"></i>&nbsp;Add</a>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped table-bordered table-hover" id="listTable">
+                        <thead>
+                            <tr>
+                                <th>SN</th>
+                                <th>Content</th>
+                                <th>Type</th>
+                                <th>Title</th>
+                                <th>Sub Title</th>
+                                <th>Is Active</th>
+                                <th>Created Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ int i = 1;}
+                            @foreach (var m in Model)
+                            {
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@m.Content</td>
+                                    @if (@m.Type == "Image")
+                                    {
+                                        <td style="text-align:center;"><a href="~/Contents/Images/@m.Content" target="_blank"><i class="fa fa-picture-o fa-2x"></i></a></td>
+                                    }
+                                    else
+                                    {
+                                        <td style="text-align:center;"><i class="fa fa-file-text-o fa-2x"></i></td>
+                                    }
+                                    <td>@m.Title</td>
+                                    <td>@m.SubTitle</td>
+                                    <td>@m.Active</td>
+                                    <td>@m.CreatedDate</td>
+                                    <td>
+                                        <a href="/Carousel/Edit/@m.CarouselID" class="editbutton btn btn-outline btn-info btn-xs" title="Edit">
+                                            Edit
+                                        </a>
+                                        @if (@m.Active)
+                                        {
+                                            <button type="button" class="deactivate btn btn-outline btn-warning btn-xs" data-id="@m.CarouselID" title="Deactivate">Deactivate</button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="activate btn btn-outline btn-primary btn-xs" data-id="@m.CarouselID" title="Activate">Activate</button>
+                                        }
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $(".activate").click(function () {
+            var uniqueId = $(this).data("id");
+            var active = 1;
+            activedeactive(uniqueId, active);
+        });
+
+        $(".deactivate").click(function () {
+            var uniqueId = $(this).data("id");
+            var deactive = 0;
+            activedeactive(uniqueId, deactive);
+        });
+    });
+
+    function activedeactive(id, status) {
+        var model = { CarouselID: id, Active: status };
+        jsonPost("/Carousel/Display", JSON.stringify(model), "/Carousel/List");
+    }
+
+    function validate() {
+
+    }
+</script>

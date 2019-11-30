@@ -1,0 +1,31 @@
+﻿.dashboardiv {
+    background-color: #337ab7;
+    text-align: center;
+    color: white;
+    height: 170px;
+    padding: 4%;
+    margin-right:4%;
+    margin-top:1%;
+}
+
+.dashboardiv:hover {
+    border: 1px solid #337ab7;
+    color: #337ab7;
+    background-color: white;
+}
+
+.dashboardiv > div > span{
+    font-family:'Century Gothic';
+    font-size:2em;
+}
+
+.page-header {
+    padding-bottom: 9px;
+    margin: 10px 0 20px !important;
+    border-bottom: 1px solid #eee;
+}
+
+.error {
+    color: red;
+    font-style: italic;
+}

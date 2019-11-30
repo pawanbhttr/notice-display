@@ -1,0 +1,155 @@
+﻿
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Banner</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-list"></i>&nbsp;Banner List
+                    <a href="#AOEModal" class="btn btn-outline btn-primary btn-xs pull-right" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i>&nbsp;Add</a>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped table-bordered table-hover" id="listTable">
+                        <thead>
+                            <tr>
+                                <th>SN</th>
+                                <th>Content</th>
+                                <th>Is Active</th>
+                                <th>Created Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ int i = 1;}
+                            @foreach (var m in Model)
+                            {
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@m.Content</td>
+                                    <td>@m.Active</td>
+                                    <td>@m.CreatedDate</td>
+                                    <td>
+                                        <a href="#AOEModal" data-id="@m.BannerID" data-content="@m.Content" class="editbutton btn btn-outline btn-info btn-xs" title="Edit" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                            Edit
+                                        </a>
+                                        @if (@m.Active)
+                                        {
+                                            <button type="button" class="deactivate btn btn-outline btn-warning btn-xs" data-id="@m.BannerID" title="Deactivate">Deactivate</button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="activate btn btn-outline btn-primary btn-xs" data-id="@m.BannerID" title="Activate">Activate</button>
+                                        }
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="AOEModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Add Banner</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <input id="hdnID" type="hidden" />
+                    <label class="control-label">Banner Content<span class="error">*</span></label>
+                    <textarea class="form-control" id="txtContent" placeholder="Write content of banner" onchange="validate()"></textarea>
+                    <label class="error" for="txtContent"></label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline btn-default" onclick="closeModal('/Banner/List')" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-outline btn-primary" onclick="return saveBanner()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function validate() {
+        var bannerContent = document.getElementById("txtContent").value;
+        if (bannerContent == '' || bannerContent == null) {
+            document.getElementById("txtContent").nextElementSibling.innerHTML = "Please fill the content field first";
+            return false;
+        }
+        else {
+            document.getElementById("txtContent").nextElementSibling.innerHTML = "";
+            return true;
+        }
+    }
+
+    function saveBanner() {
+        if (!validate()) {
+            return false;
+        }
+        var bannerContent = document.getElementById("txtContent").value;
+        var bannerId = document.getElementById("hdnID").value;
+        var userId = '@Request.RequestContext.HttpContext.Session["UserID"]';
+        var Banner = { BannerID: bannerId, Content: bannerContent, CreatedBy: userId };
+
+        $.ajax({
+            type: "POST",
+            url: "/Banner/Add",
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(Banner),
+            dataType: "json",
+            success: successFunc,
+            error: errorFunc
+        });
+
+        function successFunc(mes) {
+            document.getElementById("txtContent").value = "";
+            document.getElementById("hdnID").value = "";
+            swal("Success", mes, "success");
+        }
+
+        function errorFunc() {
+            swal("Oops!", "Error Occured", "error");
+        }
+    }
+
+    function activedeactive(id, status) {
+        var Banner = { BannerID: id, Active: status };
+        jsonPost("/Banner/Display", JSON.stringify(Banner), "/Banner/List");
+    }
+
+    $(document).ready(function () {
+        $(".editbutton").click(function () {
+            var uniqueId = $(this).data("id");
+            var content = $(this).data("content");
+            $("#hdnID").val(uniqueId);
+            $("#txtContent").val(content);
+        });
+
+        $(".activate").click(function () {
+            var uniqueId = $(this).data("id");
+            var active = 1;
+            activedeactive(uniqueId, active);
+        });
+
+        $(".deactivate").click(function () {
+            var uniqueId = $(this).data("id");
+            var deactive = 0;
+            activedeactive(uniqueId, deactive);
+        });
+    });
+</script>
